@@ -6,14 +6,13 @@ import os
 import argparse
 import datetime as dt
 
-from utils import plot_stroke
-
-# from model import Model
+from model import Model
 from utils import DataLoader
 
 def main():
 
 	parser = argparse.ArgumentParser()
+	parser.add_argument('--skip_load_data', type=bool, default=0, help='skip calling the DataLoader')
 	parser.add_argument('--rnn_size', type=int, default=400, help='size of RNN hidden state')
 	parser.add_argument('--num_layers', type=int, default=1, help='number of layers in the RNN')
 	parser.add_argument('--model', type=str, default='nn', help='nn')
@@ -36,17 +35,26 @@ def main():
 def train(args):
 
 	# Load data
-	data = DataLoader(args.batch_size, args.seq_length, args.data_scale)
+	# if not args.skip_load_data:
+	data_loader = DataLoader(args.batch_size, args.seq_length, args.data_scale)
+
+		# np.save(os.path.join(self.data, "dataLoader"), data)
+	# else:
+		# print("Skipping data loading...")
+		# np.load(data_file)
 
 	# Instantiate model
 	# model = Model(args)
 
-	# with tf.Session() as session:
+	model.input_data
 
-	# 	for e in range(num_epochs):
-	# 		session.run()
+	model = tf.keras.models.Sequential()
+	model.add(tf.keras.layers.Dense(128, activation='relu'))
+	model.add(tf.keras.layers.Dense(2))
+	model.add(tf.keras.layers.Activation('softmax'))
+	model.compile(optimizer='adam', loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True), metrics=['accuracy'])
 
-	# 		for b in range(num_batches):
+	model.fit(data_loader.train_data, data_loader.valid_data, epochs=1)
 	return
 
 main()
